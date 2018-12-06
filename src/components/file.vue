@@ -23,7 +23,6 @@
       :extension="extension"
       :file-category="fileCategory"
       >       
-      <!-- <v-flex lg10 class="uploaderprogress__block"> -->
         <div class="inner__uploaderprogress">
           <div class="uploader__progress my-2">
             <v-toolbar  class="uploader_details py-1 px-1">
@@ -45,7 +44,7 @@
                         </p>
                       </div>
                   </template>
-                  <template  v-show="status === 'uploading'">
+                  <template v-show="status === 'uploading'">
                     <div class="caption">
                         File size {{formatedSize}}
                       <p class="notifation_success d-inline mx-2">
@@ -66,6 +65,15 @@
                   <v-btn round color="primary" dark @click="dialog = true">
                     <v-icon class="edit">create</v-icon>
                   </v-btn>
+                  <v-btn round color="primary" dark @click="pause">
+                    <v-icon>pause_circle_filled</v-icon>
+                  </v-btn>
+                  <v-btn round color="primary" dark @click="resume">
+                    <v-icon>play_circle_filled</v-icon>
+                  </v-btn>
+                  <v-btn round color="primary" dark  @click="retry">
+                    <v-icon>replay</v-icon>
+                  </v-btn>
                   <v-btn round color="primary" dark @click="remove">
                     <v-icon>delete_sweep</v-icon>
                   </v-btn>
@@ -75,7 +83,6 @@
           </div>
         </div>
     </slot>
-  <!-- </v-flex>  --> 
   <!--
   <div class="uploader-file" :status="status">
     <slot
