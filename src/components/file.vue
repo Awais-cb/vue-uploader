@@ -1,43 +1,43 @@
 <template>
-<!--          
-              <v-flex lg10 class="uploaderprogress__block">
-                <div class="inner__uploaderprogress">
-                  <div class="uploader__progress my-2">
-                    <v-toolbar  class="uploader_details py-1 px-1">
-                      <div class="v-toolbar-title videothum">
-                        <img src="../images/VID.png">
-                      </div>
-                      <v-spacer class="text my-1 mx-2">
-                        <div class="body-2 uploader_title">
-                          Tum Se Hi Full Song
-                        </div>
-                        <div class="progress">
-                          <v-progress-linear color="success" height="2" value="90" ></v-progress-linear>
-                        </div>
-                        <div class="uploader_text">
-                          <div class="caption">
-                            120-k
-                            <p class="notifation_success d-inline mx-2">
-                               - uploaded Successfully 30%
-                            </p>
-                          </div>
-                        </div>
-                      </v-spacer>
-                      <div class="v-toolbar-title btnholder">
-                        <div class="text-xs-center">        
-                          <v-btn round color="primary" dark @click="dialog = true">
-                            <v-icon class="edit">create</v-icon>
-                          </v-btn>
-                          <v-btn round color="primary" dark>
-                            <v-icon>delete_sweep</v-icon>
-                          </v-btn>
-                        </div>
-                      </div>
-                    </v-toolbar>
-                  </div>
-                </div>
-              </v-flex> 
--->
+          
+  <v-flex lg10 class="uploaderprogress__block">
+    <div class="inner__uploaderprogress">
+      <div class="uploader__progress my-2">
+        <v-toolbar  class="uploader_details py-1 px-1">
+          <div class="v-toolbar-title videothum">
+            <img src="../images/VID.png">
+          </div>
+          <v-spacer class="text my-1 mx-2">
+            <div class="body-2 uploader_title">
+              Tum Se Hi Full Song
+            </div>
+            <div class="progress">
+              <v-progress-linear color="success" height="2" value="90" ></v-progress-linear>
+            </div>
+            <div class="uploader_text">
+              <div class="caption">
+                120-k
+                <p class="notifation_success d-inline mx-2">
+                   - uploaded Successfully 30%
+                </p>
+              </div>
+            </div>
+          </v-spacer>
+          <div class="v-toolbar-title btnholder">
+            <div class="text-xs-center">        
+              <v-btn round color="primary" dark @click="dialog = true">
+                <v-icon class="edit">create</v-icon>
+              </v-btn>
+              <v-btn round color="primary" dark>
+                <v-icon>delete_sweep</v-icon>
+              </v-btn>
+            </div>
+          </div>
+        </v-toolbar>
+      </div>
+    </div>
+  </v-flex> 
+
   <div class="uploader-file" :status="status">
     <slot
       :file="file"
