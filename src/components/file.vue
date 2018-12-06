@@ -36,7 +36,7 @@
         </v-toolbar>
       </div>
     </div>
-  </v-flex> 
+  </v-flex>  
 
   <div class="uploader-file" :status="status">
     <slot
