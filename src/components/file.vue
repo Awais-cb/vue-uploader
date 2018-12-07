@@ -30,16 +30,18 @@
                 <img src="../images/VID.png">
               </div>
               <v-spacer class="text my-1 mx-2">
-                <div class="body-2 uploader_title">
-                  {{file.name}}
+                <div class="uploader_title">
+                  <p class="subheading font-weight-medium">
+                    {{file.name}}
+                  </p>  
                 </div>
                 <div class="progress">
-                  <v-progress-linear color="success" height="2" :value="progressStyle.progress" ></v-progress-linear>
+                  <v-progress-linear :color="getProgressColor(status)" height="2" :value="progressStyle.progress"></v-progress-linear>
                 </div>
                 <div class="uploader_text">
                   <template v-if="status !== 'uploading'">
                       <div class="caption">
-                        <p class="notifation_success d-inline mx-2">
+                        <p v-bind:class="getProgressClass(status)+' d-inline mx-2'">
                           {{statusText}}
                         </p>
                       </div>
@@ -47,13 +49,13 @@
                   <template v-if="status === 'uploading'">
                     <div class="caption">
                         File size {{formatedSize}}
-                      <p class="notifation_success d-inline mx-2">
+                      <p v-bind:class="getProgressClass(status)+' d-inline mx-2'">
                          - Progress {{progressStyle.progress}}
                       </p>
-                      <p class="notifation_success d-inline mx-2">
+                      <p v-bind:class="getProgressClass(status)+' d-inline mx-2'">
                          - Avarage speed {{formatedAverageSpeed}}
                       </p>
-                      <p class="notifation_success d-inline mx-2">
+                      <p v-bind:class="getProgressClass(status)+' d-inline mx-2'">
                          - Remaining time {{formatedTimeRemaining}}
                       </p>
                     </div>
@@ -83,53 +85,6 @@
           </div>
         </div>
     </slot>
-  <!--
-  <div class="uploader-file" :status="status">
-    <slot
-      :file="file"
-      :list="list"
-      :status="status"
-      :paused="paused"
-      :error="error"
-      :average-speed="averageSpeed"
-      :formated-average-speed="formatedAverageSpeed"
-      :current-speed="currentSpeed"
-      :is-complete="isComplete"
-      :is-uploading="isUploading"
-      :size="size"
-      :formated-size="formatedSize"
-      :uploaded-size="uploadedSize"
-      :progress="progress"
-      :progress-style="progressStyle"
-      :progressing-class="progressingClass"
-      :time-remaining="timeRemaining"
-      :formated-time-remaining="formatedTimeRemaining"
-      :type="type"
-      :extension="extension"
-      :file-category="fileCategory"
-      >
-      <div class="uploader-file-info">
-        <div class="uploader-file-name"><i class="uploader-file-icon" :icon="fileCategory"></i>{{file.name}}</div>
-        <div class="uploader-file-size">{{formatedSize}}</div>
-        <div class="uploader-file-meta"></div>
-        <div class="uploader-file-status">
-          <span v-show="status !== 'uploading'">{{statusText}}</span>
-          <span v-show="status === 'uploading'">
-            <span>{{progressStyle.progress}}</span>
-            <em>{{formatedAverageSpeed}}</em>
-            <i>{{formatedTimeRemaining}}</i>
-          </span>
-        </div>
-        <div class="uploader-file-actions">
-          <span class="uploader-file-pause" @click="pause"></span>
-          <span class="uploader-file-resume" @click="resume">️</span>
-          <span class="uploader-file-retry" @click="retry"></span>
-          <span class="uploader-file-remove" @click="remove"></span>
-        </div>
-      </div>
-    </slot>
-  </div>
-  -->
 </div>
 </template>
 
@@ -308,6 +263,30 @@
         this.error = true
         this.isComplete = false
         this.isUploading = false
+      },
+      getProgressColor (status) {
+        if (status === 'waiting' || status === 'uploading') {
+          return 'info'
+        } else if (status === 'success') {
+          return 'success'
+        } else if (status === 'paused') {
+          return 'warning'
+        } else if (status === 'error') {
+          return 'error'
+        }
+        return 'info'
+      },
+      getProgressClass (status) {
+        if (status === 'waiting' || status === 'uploading') {
+          return 'notifation_Progress'
+        } else if (status === 'success') {
+          return 'notifation_success'
+        } else if (status === 'paused') {
+          return 'notifation_warning'
+        } else if (status === 'error') {
+          return 'notifation_error'
+        }
+        return 'notifation_Progress'
       }
     },
     mounted () {
@@ -368,11 +347,3 @@
     }
   }
 </script>
-
-<style>
-  /*
-  .uploader-file[status="error"] .uploader-file-progress {
-    
-  }
-  */
-</style>
