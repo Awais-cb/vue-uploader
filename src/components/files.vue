@@ -1,11 +1,12 @@
 <template>
   <div class="uploader-files">
     <slot :files="files">
-      <ul>
-        <li v-for="file in files" :key="file.id">
-          <uploader-file :file="file"></uploader-file>
-        </li>
-      </ul>
+      <div>
+        <v-flex lg12 class="uploaderprogress__block">
+          <div v-for="file in files" :key="file.id">
+            <uploader-file :file="file"></uploader-file>
+          </div>
+      </v-flex>
     </slot>
   </div>
 </template>
@@ -33,10 +34,5 @@
 <style>
   .uploader-files {
     position: relative;
-  }
-  .uploader-files > ul {
-    list-style: none;
-    margin: 0;
-    padding: 0
   }
 </style>
