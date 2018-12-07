@@ -535,10 +535,21 @@
   </div>
 </template>
 <script>
+  // vuelidate import
+  /*
+  import {
+    required,
+    email,
+    minLength,
+    maxLength,
+    sameAs,
+    alphaNum
+  } from 'vuelidate/lib/validators'
+  */
+  // vuelidate import
   import Uploader from 'simple-uploader.js'
   import events from '../common/file-events'
   import { secondsToStr } from '../common/utils'
-
   const COMPONENT_NAME = 'uploader-file'
 
   export default {
@@ -591,6 +602,47 @@
         ],
         // *********
         // edit file
+        // *********
+        // vuelidate
+        // *********
+        /*
+        validations: {
+          username: {
+            required,
+            minLength: minLength(5),
+            alphaNum
+          },
+          email: {
+            required,
+            email
+          },
+          password: {
+            required,
+            minLength: minLength(5),
+            maxLength: maxLength(60)
+          },
+          passwordCheck: {
+            sameAs: sameAs('password')
+          },
+          userCountry: {
+            required
+          },
+          dob: {
+            required
+          },
+          userGender: {
+            required
+          },
+          userCategory: {
+            required
+          },
+          agreeOnTerms: {
+            sameAs: sameAs(() => true)
+          }
+        },
+        */
+        // *********
+        // vuelidate
         // *********
         paused: false,
         error: false,
@@ -726,6 +778,8 @@
         this.error = false
         this.isComplete = true
         this.isUploading = false
+        console.log(this.$axios.defaults)
+        console.log(this.file)
       },
       _fileComplete () {
         this._fileSuccess()
