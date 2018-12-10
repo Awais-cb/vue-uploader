@@ -40,31 +40,31 @@
               </div>
               <div class="uploader_text">
                 <template v-if="status !== 'uploading'">
-                    <div class="caption">
-                      <p v-bind:class="getProgressClass(status)+' d-inline mx-2'">
-                        {{statusText}}
-                      </p>
-                    </div>
-                </template>
-                <template v-if="status === 'uploading'">
                   <div class="caption">
-                      File size {{formatedSize}}
                     <p v-bind:class="getProgressClass(status)+' d-inline mx-2'">
-                       - Progress {{progressStyle.progress}}
-                    </p>
-                    <p v-bind:class="getProgressClass(status)+' d-inline mx-2'">
-                       - Avarage speed {{formatedAverageSpeed}}
-                    </p>
-                    <p v-bind:class="getProgressClass(status)+' d-inline mx-2'">
-                       - Remaining time {{formatedTimeRemaining}}
+                      {{statusText}}
                     </p>
                   </div>
                 </template>
-              </div>
+                <template v-if="status === 'uploading'">
+                  <div class="caption">
+                    File size {{formatedSize}}
+                    <p v-bind:class="getProgressClass(status)+' d-inline mx-2'">
+                     - Progress {{progressStyle.progress}}
+                   </p>
+                   <p v-bind:class="getProgressClass(status)+' d-inline mx-2'">
+                     - Avarage speed {{formatedAverageSpeed}}
+                   </p>
+                   <p v-bind:class="getProgressClass(status)+' d-inline mx-2'">
+                     - Remaining time {{formatedTimeRemaining}}
+                   </p>
+                 </div>
+               </template>
+             </div>
             </v-spacer>
             <div class="v-toolbar-title btnholder">
               <div class="text-xs-center">        
-                <v-btn round color="primary" dark @click="dialog = true" v-if="status === 'success'">
+                <v-btn round color="primary" dark @click="onEditButton" v-if="status === 'success'">
                   <v-icon class="edit">create</v-icon>
                 </v-btn>
                 <v-btn round color="primary" dark @click="pause" v-if="status === 'uploading'">
@@ -84,468 +84,10 @@
           </v-toolbar>
         </div>
       </div>
-      <v-layout row justify-center>
-        <!-- ***************************** -->
-        <!-- Edit video block -->
-        <!-- ***************************** -->
-        <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
-          <v-card>
-                <v-toolbar dark color="primary">
-                  <v-btn icon dark @click="dialog = false">
-                    <v-icon>close</v-icon>
-                  </v-btn>
-                  <v-toolbar-title>Settings</v-toolbar-title>
-                  <v-spacer></v-spacer>
-                  <v-toolbar-items>
-                    <v-btn dark flat @click="dialog = false">Save</v-btn>
-                  </v-toolbar-items>
-                </v-toolbar>
-            <v-container grid-list-md>
-              <div class="headline d-block text__Required">Required fields</div>
-                <v-layout class="Uploaderformopen" py-4 px-3 fill-height>
-                  <v-flex lg8 md8 xs12 sm12>
-                    <div class="my-2">
-                      <v-text-field v-model="title" label="Title"></v-text-field>
-                    </div>
-                    <div class="my-2">
-                      <v-text-field v-model="description" label="Description"></v-text-field>
-                    </div>
-                    <div class="my-2">
-                      <v-text-field v-model="tags" label="Tags" tags clearable>
-                      </v-text-field>
-                    </div>
-                    <div class="my-2">
-                      <v-btn slot="activator" color="primary" dark @click="dialog2 = true">
-                        Subtitles Section
-                      </v-btn>
-                      <v-btn slot="activator" color="primary" dark @click="dialog3 = true">
-                        Date recorded & Location
-                      </v-btn>
-                      <v-btn slot="activator" color="primary" dark @click="dialog4 = true">
-                        Sharing and privacy options
-                      </v-btn>
-                    </div>
-                    <v-layout row wrap mt-4 class="uploadthumbsforms">
-                      <v-flex lg12 class="upload__thumb">
-                        <div class="text-md-center my-2">
-                          <v-btn class="uploadinput">
-                            <v-icon>control_point</v-icon>
-                            Add new Thumb
-                          </v-btn>
-                        </div>
-                      </v-flex>
-                      <!-- thumb area (show dynamic thumbs here) -->
-                      <!-- <v-flex lg3 class="Video_Thumbnails">
-                        <div class="selected_img">
-                          <div class="vodthumb">
-                            <div class="on_hover">
-                              <v-btn flat small><v-icon>delete</v-icon></v-btn>
-                            </div>
-                            <img class="v-image__image" src="~/static/images/defultthumb/2.png">
-                          </div>
-                          <v-radio-group v-model="radioGroup">
-                            <v-radio></v-radio>
-                          </v-radio-group>
-                          <span class="caption">thumb-1.png</span>
-                        </div>
-                      </v-flex> -->
-                      <!-- thumb area (show dynamic thumbs here) -->
-                    </v-layout>
-                  </v-flex>
-                  <v-flex lg4 md4 xs12 sm12 ml-5>
-                    <div class="Video__Category">
-                      <div class="headline">
-                        Video Category
-                      </div>
-                      <span class="caption">You May Select Up To 4 Categories</span>
-                      <div class="select_Video__Category app-card mb-4">
-                          <div class="ais-refinement-list">
-                            <div class="list-item-inner my-2 py-2">
-                              <div class="list-item-one">
-                                <div class="v-toolbar__content"> 
-                                  <div class="v-toolbar__title">
-                                    <v-checkbox class="d-inline" v-model="checkbox"></v-checkbox>
-                                  </div>
-                                  <span class="spacer text">Action</span>
-                                  <!-- arow_click -->
-                                  <div class="v-toolbar__items open-sublist">
-                                    <v-icon class="openicon">expand_more</v-icon>
-                                  </div>
-                                </div>
-                                <!-- list-item-sub-cat --> 
-                                <div class="list-item-sub action">
-                                  <div class="v-toolbar__content sub-cat">
-                                    <div class="v-toolbar__title">
-                                      <v-checkbox class="d-inline" v-model="checkbox"></v-checkbox>
-                                    </div>
-                                    <span class="spacer text">Romantic Comedies</span>
-                                  </div>
-                                  <div class="v-toolbar__content sub-cat">
-                                    <div class="v-toolbar__title">
-                                      <v-checkbox class="d-inline" v-model="checkbox"></v-checkbox>
-                                    </div>
-                                    <span class="spacer text">New Releases</span>
-                                  </div>
-                                  <div class="v-toolbar__content sub-cat">
-                                    <div class="v-toolbar__title">
-                                      <v-checkbox class="d-inline" v-model="checkbox"></v-checkbox>
-                                    </div>
-                                    <span class="spacer text">Exciting Movies</span>
-                                  </div>
-                                </div>
-                              </div>
-                              <!-- second_category with out sub cat -->
-                              <div class="list-item-one">
-                                <div class="v-toolbar__content"> 
-                                  <div class="v-toolbar__title">
-                                    <v-checkbox class="d-inline" v-model="checkbox"></v-checkbox>
-                                  </div>
-                                  <span class="spacer text">Music & Musicals</span>
-                                </div>    
-                              </div>
-                              <!-- second_category with out sub cat -->
-                              <div class="list-item-one">
-                                <div class="v-toolbar__content"> 
-                                  <div class="v-toolbar__title">
-                                    <v-checkbox class="d-inline" v-model="checkbox"></v-checkbox>
-                                  </div>
-                                  <span class="spacer text">Romance</span>
-                                </div>    
-                              </div>
-                              <!-- second_category with out sub list -->
-                              <div class="list-item-one">
-                                <div class="v-toolbar__content"> 
-                                  <div class="v-toolbar__title">
-                                    <v-checkbox class="d-inline" v-model="checkbox"></v-checkbox>
-                                  </div>
-                                  <span class="spacer text">Romance</span>
-                                  <div class="v-toolbar__items">
-                                    <v-icon>expand_more</v-icon>
-                                  </div>
-                                </div>    
-                              </div>
-                              <!-- second_category with out sub list -->
-                              <div class="list-item-one">
-                                <div class="v-toolbar__content"> 
-                                  <div class="v-toolbar__title">
-                                      <v-checkbox class="d-inline" v-model="checkbox"></v-checkbox>
-                                  </div>
-                                  <span class="spacer text">Comedies</span>
-                                </div>    
-                              </div>
-                            </div>
-                          </div>
-                      </div>
-                    </div>
-                  </v-flex>
-                </v-layout>
-              </div>
-            </v-container>
-          </v-card>
-        </v-dialog>
-        <!-- ***************************** -->
-        <!-- Edit video end here-->
-        <!-- ***************************** -->
-        <!-- ***************************** -->
-        <!-- Subtitles_Section_Form  -->
-        <!-- ***************************** -->
-        <v-dialog class="Subtitles_Section" v-model="dialog2" max-width="600px">
-          <v-card>
-            <v-card-title>
-              <span class="headline">Subtitles Section</span>
-            </v-card-title>
-            <v-card-text>
-              <v-container grid-list-md>
-                <v-layout wrap align-center justify-center row>
-                  <span class="subheading">Upload your subtitle files to show subtitles in this video. You can upload maximum of 2 files, each file can be 100 KB in size.</span>
-                  <div class="text-xs-center my-2">
-                    <v-btn class="inputsubtitle">
-                      <v-icon class="mx-1">attachment</v-icon>
-                      Select Subtitle File
-                    </v-btn>
-                  </div>
-                  <v-flex xs12 my-2>
-                    <v-text-field
-                    v-model="first"
-                    label="Language of Subtitle file. e:g English(uk)"
-                    solo
-                    ></v-text-field>
-                  </v-flex>
-                </v-layout>
-              </v-container>
-              <small></small>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" flat  @click="dialog2=false">Close</v-btn>
-              <v-btn color="blue darken-1" flat  @click="dialog2=false">Save</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-        <!-- ***************************** -->
-        <!-- Subtitles_Section_Form end here-->
-        <!-- ***************************** -->
-        <!-- ***************************** -->
-        <!-- Date recorded & Location_dialog -->
-        <!-- ***************************** -->
-        <v-dialog class="Location__dialog" v-model="dialog3" max-width="600px">
-          <v-card>
-              <v-card-title>
-                <span class="headline">Date recorded & Location</span>
-              </v-card-title>
-              <v-card-text>
-                <v-container grid-list-md>
-                  <v-layout wrap align-center justify-center row>
-                    <v-flex xs12>
-                      <v-select
-                      :items="items"
-                      v-model="Blockedcountries"
-                      label="Blocked in countries"
-                      ></v-select>
-                    </v-flex>
-                    <v-flex xs12>
-                      <v-select
-                      :items="items"
-                      v-model="Uploadedfrom"
-                      label="Uploaded from"
-                      ></v-select>
-                    </v-flex>
-                    <v-flex xs12>
-                      <v-menu
-                      ref="menu"
-                      :close-on-content-click="false"
-                      v-model="menu"
-                      :nudge-right="40"
-                      :return-value.sync="date"
-                      lazy
-                      transition="scale-transition"
-                      offset-y
-                      full-width
-                      min-width="290px"
-                      >
-                      <v-text-field
-                      slot="activator"
-                      v-model="date"
-                      label="Picker in menu"
-                      prepend-icon="event"
-                      readonly
-                      ></v-text-field>
-                      <v-date-picker v-model="date" no-title scrollable>
-                        <v-spacer></v-spacer>
-                        <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
-                        <v-btn flat color="primary" @click="$refs.menu.save(date)">OK</v-btn>
-                      </v-date-picker>
-                    </v-menu>
-                  </v-flex>
-                </v-layout>
-              </v-container>
-              <small></small>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" flat  @click="dialog3=false">Close</v-btn>
-              <v-btn color="blue darken-1" flat  @click="dialog3=false">Save</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-        <!-- ***************************** -->
-        <!-- Date recorded & Location_dialog end here -->
-        <!-- ***************************** -->
-        <!-- ***************************** -->
-        <!-- sharing block -->
-        <!-- ***************************** -->
-        <v-dialog class="Sharing__options" v-model="dialog4" max-width="600px">
-          <v-card>
-            <v-card-title>
-              <span class="headline">Sharing and privacy options</span>
-            </v-card-title>
-            <v-card-text>
-              <v-container grid-list-md>
-                <v-layout wrap>
-                  <div class="sectionContent">
-                    <v-flex lg12 class="option__inners">  
-                      <v-flex d-inline-block>
-                        <v-radio-group v-model="radioGroup"> <v-radio v-for=""></v-radio></v-radio-group>
-                      </v-flex>
-
-                      <v-flex d-inline-block>
-                        Public - Share your video with Everyone! (Recommended)
-                      </v-flex>
-                    </v-flex>
-
-                    <v-flex lg12 class="option__inners">  
-                      <v-flex d-inline-block>
-                        <v-radio-group v-model="radioGroup"> <v-radio v-for=""></v-radio></v-radio-group>
-                      </v-flex>
-
-                      <v-flex d-inline-block>
-                        Private - Viewable by you and your friends only.
-                      </v-flex>
-                    </v-flex>
-
-                    <v-flex lg12 class="option__inners">  
-                      <v-flex d-inline-block>
-                        <v-radio-group v-model="radioGroup"> <v-radio v-for=""></v-radio></v-radio-group>
-                      </v-flex>
-
-                      <v-flex d-inline-block>
-                        Public - Share your video with Everyone! (Recommended)
-                      </v-flex>
-                    </v-flex>
-
-                    <v-flex lg12 class="option__inners">  
-                      <v-flex d-inline-block>
-                        <v-radio-group v-model="radioGroup"> <v-radio v-for=""></v-radio></v-radio-group>
-                      </v-flex>
-
-                      <v-flex d-inline-block>
-                        Unlisted (anyone with the link and/or password can view)
-                      </v-flex>
-                    </v-flex>
-
-                    <v-flex lg12 class="option__inners">  
-                      <v-flex d-inline-block>
-                        <v-radio-group v-model="radioGroup"> <v-radio v-for=""></v-radio></v-radio-group>
-                      </v-flex>
-
-                      <v-flex d-inline-block>
-                        Logged only (only logged in users can watch)
-                      </v-flex>
-                    </v-flex>
-                  </div>
-                  <div class="videopassword">
-                    <v-flex d-block >
-                      <v-text-field 
-                      v-model="videoPassword"
-                      label="Video Password"
-                      solo
-                      ></v-text-field>
-                    </v-flex>
-                  </div>
-                  <div class="uservideo">
-                    <v-flex d-block >
-                      <v-text-field 
-                      v-model="videoUsers"
-                      label="Video users"
-                      solo
-                      ></v-text-field>
-                    </v-flex>
-                  </div>
-                  <div class="sectionContent">
-                    <v-flex lg12 class="option__inners_group">
-                      <v-layout wrap>
-                        <div>
-                          <v-radio-group v-model="radioGroup"> <v-radio v-for=""></v-radio></v-radio-group>
-                        </div>
-
-                        <div>
-                          Allow Comments Voting
-                        </div>
-                      </v-layout>
-                      <v-layout wrap>
-                        <div>
-                          <v-radio-group v-model="radioGroup"> <v-radio v-for=""></v-radio></v-radio-group>
-                        </div>
-
-                        <div>
-                          Allow Comments Voting
-                        </div>
-                      </v-layout>
-                    </v-flex>
-
-                    <v-flex lg12 class="option__inners_group">
-                      <v-layout wrap>
-                        <div>
-                          <v-radio-group v-model="radioGroup"> <v-radio v-for=""></v-radio></v-radio-group>
-                        </div>
-
-                        <div>
-                          Allow Comments Voting
-                        </div>
-                      </v-layout>
-                      <v-layout wrap>
-                        <div>
-                          <v-radio-group v-model="radioGroup"> <v-radio v-for=""></v-radio></v-radio-group>
-                        </div>
-
-                        <div>
-                          Allow Comments Voting
-                        </div>
-                      </v-layout>
-                    </v-flex>
-
-                    <v-flex lg12 class="option__inners_group">
-                      <v-layout wrap>
-                        <div>
-                          <v-radio-group v-model="radioGroup"> <v-radio v-for=""></v-radio></v-radio-group>
-                        </div>
-
-                        <div>
-                          Allow Comments Voting
-                        </div>
-                      </v-layout>
-                      <v-layout wrap>
-                        <div>
-                          <v-radio-group v-model="radioGroup"> <v-radio v-for=""></v-radio></v-radio-group>
-                        </div>
-
-                        <div>
-                          Allow Comments Voting
-                        </div>
-                      </v-layout>
-                    </v-flex>
-
-                    <v-flex lg12 class="option__inners_group">
-                      <v-layout wrap>
-                        <div>
-                          <v-radio-group v-model="radioGroup"> <v-radio v-for=""></v-radio></v-radio-group>
-                        </div>
-
-                        <div>
-                          Allow Comments Voting
-                        </div>
-                      </v-layout>
-                      <v-layout wrap>
-                        <div>
-                          <v-radio-group v-model="radioGroup"> <v-radio v-for=""></v-radio></v-radio-group>
-                        </div>
-
-                        <div>
-                          Allow Comments Voting
-                        </div>
-                      </v-layout>
-                    </v-flex> 
-                  </div>
-                </v-layout>
-              </v-container>
-              <small></small>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" flat  @click="dialog4=false">Close</v-btn>
-              <v-btn color="blue darken-1" flat  @click="dialog4=false">Save</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-        <!-- ***************************** -->
-        <!-- sharing block ends here-->
-        <!-- ***************************** -->
-      </v-layout> 
     </slot>
   </div>
 </template>
 <script>
-  // vuelidate import
-  /*
-  import {
-    required,
-    email,
-    minLength,
-    maxLength,
-    sameAs,
-    alphaNum
-  } from 'vuelidate/lib/validators'
-  */
   // vuelidate import
   import Uploader from 'simple-uploader.js'
   import events from '../common/file-events'
@@ -568,82 +110,7 @@
     },
     data () {
       return {
-        // *********
-        // edit file
-        // *********
-        // dialog boxes
-        dialog: false,
-        dialog2: false,
-        dialog3: false,
-        dialog4: false,
-        // dialog boxes
-        date: new Date().toISOString().substr(0, 7),
-        menu: false,
-        // Edit video
-        title: this.file.name,
-        description: this.file.name,
-        tags: [this.file.name],
-        radioGroup: '',
-        videoPassword: '',
-        videoUsers: '',
-        first: '',
-        Blockedcountries: '',
-        Uploadedfrom: '',
-        checkbox: false,
-        items: [
-          {
-            action: 'local_activity',
-            title: 'Attractions'
-          }
-        ],
-        states: [
-          'Alabama', 'Alaska', 'American Samoa', 'Arizona',
-          'Arkansas', 'California'
-        ],
-        // *********
-        // edit file
-        // *********
-        // vuelidate
-        // *********
-        /*
-        validations: {
-          username: {
-            required,
-            minLength: minLength(5),
-            alphaNum
-          },
-          email: {
-            required,
-            email
-          },
-          password: {
-            required,
-            minLength: minLength(5),
-            maxLength: maxLength(60)
-          },
-          passwordCheck: {
-            sameAs: sameAs('password')
-          },
-          userCountry: {
-            required
-          },
-          dob: {
-            required
-          },
-          userGender: {
-            required
-          },
-          userCategory: {
-            required
-          },
-          agreeOnTerms: {
-            sameAs: sameAs(() => true)
-          }
-        },
-        */
-        // *********
-        // vuelidate
-        // *********
+        // *****uploader don't touch it*****
         paused: false,
         error: false,
         averageSpeed: 0,
@@ -658,6 +125,7 @@
         type: '',
         extension: '',
         progressingClass: ''
+        // *****uploader don't touch it*****
       }
     },
     computed: {
@@ -778,7 +246,7 @@
         this.error = false
         this.isComplete = true
         this.isUploading = false
-        console.log(this.$axios.defaults)
+        console.log(this.$axios.defaults.baseURL)
         console.log(this.file)
       },
       _fileComplete () {
@@ -813,6 +281,9 @@
           return 'notifation_error'
         }
         return 'notifation_Progress'
+      },
+      onEditButton (event) {
+        this.$store.commit('editUploadedFile', this.file)
       }
     },
     mounted () {
