@@ -283,7 +283,22 @@
         return 'notifation_Progress'
       },
       onEditButton (event) {
-        this.$store.commit('editUploadedFile', this.file)
+        try {
+          this.$axios.get(`/videos/editVideo/${this.file.uniqueIdentifier}`).then((response) => {
+            let vData = response.data.video
+            vData.uniqueIdentifier = this.file.uniqueIdentifier
+            this.$store.commit('editUploadedFile', vData)
+          }, (err) => {
+            if (!err.response) {
+              this.$store.commit('snackIt', "Server isn't responding can't load video data")
+            } else {
+              let errorMsg = err.response.data.errors.error
+              this.$store.commit('snackIt', errorMsg[0])
+            }
+          })
+        } catch (err) {
+          console.log(err)
+        }
       }
     },
     mounted () {
