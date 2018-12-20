@@ -246,8 +246,6 @@
         this.error = false
         this.isComplete = true
         this.isUploading = false
-        console.log(this.$axios.defaults.baseURL)
-        console.log(this.file)
       },
       _fileComplete () {
         this._fileSuccess()
